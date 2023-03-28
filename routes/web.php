@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,8 +15,6 @@ use App\Http\Controllers\ProductController;
 Route::get('/', function () {
     return view('auth/login');
 });
-
-Route::resource('products', ProductController::class);
 Auth::routes();
+Route::get('/user-dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('user.dashboard');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

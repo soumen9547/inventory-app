@@ -1,63 +1,104 @@
-* {
-    box-sizing: border-box;
+/* Set a max-width for the table container */
+#product-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Add a border-collapse property to the table */
+#product-table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Add a white background color and a border to the table header */
+#product-table th {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Add a border to the table rows */
+#product-table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+/* Add a background color to the table rows on hover */
+#product-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Add padding to the table cells */
+#product-table td {
+  padding: 8px;
+}
+
+/* Add media queries for smaller screens */
+@media screen and (max-width: 600px) {
+
+  /* Make the table container full-width */
+  #product-table {
+    overflow-x: auto;
   }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+
+  /* Hide the table header */
+  #product-table table thead {
+    display: none;
   }
-  
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .form-container {
+
+  /* Add a background-color to the table rows and hide the table cell borders */
+  #product-table table tr {
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 20px;
-    width: 300px;
-  }
-  
-  h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 10px;
-  }
-  
-  label {
+    border-bottom: none;
+    border-top: 1px solid #ddd;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: .625em;
   }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px;
-    width: 100%;
+
+  /* Add padding to the table cells */
+  #product-table table td {
+    display: block;
+    text-align: right;
+    font-size: 13px;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    padding-left: 50%;
   }
-  
-  button[type="submit"] {
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 10px;
-    width: 100%;
-    margin-top: 10px;
-    cursor: pointer;
+
+  /* Add a left-aligned label for each table cell */
+  #product-table table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 15px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: left;
   }
-  
-  button[type="submit"]:hover {
-    background-color: #3e8e41;
-  }
-  
+}
+/* Edit button styling */
+button.edit-product {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+/* Delete button styling */
+button.delete-product {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+
+#add-product-btn {
+  position: absolute;
+  top: 23px;
+  right: 307px;
+
+}

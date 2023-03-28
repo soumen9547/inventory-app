@@ -1,10 +1,11 @@
 <?php
+namespace App\Http\Controllers\API;
 
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class ProductController extends Controller
 {
@@ -15,7 +16,7 @@ class ProductController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -25,9 +26,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
         $products = Product::all();
-        return view('products.index', compact('products'));
+        return response()->json($products);
     }
 
     /**
@@ -37,12 +37,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-        if (!$user->user_type =='admin') {
-            abort(403, 'Unauthorized action.');
-        }
-
-        return view('products.create');
+        abort(403, 'Unauthorized action.');
     }
 
     /**
@@ -54,7 +49,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        if (!$user->user_type =='admin') {
+        if (!$user->user_type == 'admin') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -67,8 +62,18 @@ class ProductController extends Controller
 
         Product::create($validatedData);
 
-        return redirect()->route('products.index')
-                         ->with('success', 'Product created successfully.');
+        return response()->json(['message' => 'Product created successfully.']);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Product $product)
+    {
+        return response()->json($product);
     }
 
     /**
@@ -80,11 +85,11 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $user = Auth::user();
-        if (!$user->user_type =='admin' && !$user->user_type =='moderator') {
+        if (!$user->user_type == 'admin' && !$user->user_type == 'moderator') {
             abort(403, 'Unauthorized action.');
         }
 
-        return view('products.edit', compact('product'));
+        return response()->json($product);
     }
 
     /**
@@ -97,7 +102,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $user = Auth::user();
-        if (!$user->user_type =='admin' && !$user->user_type =='moderator') {
+        if (!$user->user_type == 'admin' && !$user->user_type == 'moderator') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -110,28 +115,23 @@ class ProductController extends Controller
 
         $product->update($validatedData);
 
-        return redirect()->route('products.index')
-                         ->with('success', 'Product updated successfully.');
+        return response()->json(['message' => 'Product updated successfully.']);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
+    * Remove the specified resource from storage.
+    *
+    * @param  \App\Models\Product  $product
+    * @return \Illuminate\Http\Response
+    */
     public function destroy(Product $product)
     {
-            $user = Auth::user();
-            if (!$user->user_type =='moderator') {
-                abort(403, 'Unauthorized action.');
-            }
-            
+        $user = Auth::user();
+        if ($user->user_type === 'admin') {
             $product->delete();
-            
-            return redirect()->route('products.index')
-                             ->with('success', 'Product deleted successfully.');
-        
+            return response()->json(['message' => 'Product deleted successfully.']);
+        }else {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
     }
-}            
-       
+}

@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+
 
 class RegisterController extends Controller
 {
@@ -66,13 +68,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'user_type' => $data['user_type'],
             'password' => Hash::make($data['password']),
         ]);
+
+        // Generate API token for the user
+        $user->api_token = Str::random(60);
+        $user->save();
+
+        return $user;
     }
+
 
   /**
      * Get the post register / login redirect path.
@@ -81,7 +90,7 @@ class RegisterController extends Controller
      */
     public function redirectPath(): ?string
     {
-        $redirect = route('products.index');
+        $redirect = route('user.dashboard');
         return $redirect;
     }
     

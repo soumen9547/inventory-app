@@ -35,7 +35,7 @@ class LoginController extends Controller
      */
     public function redirectPath(): ?string
     {
-        $redirect = route('products.index');
+        $redirect = route('user.dashboard');
         return $redirect;
     }
     /**
