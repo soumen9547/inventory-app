@@ -30,7 +30,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close close-modal" data-dismiss="modal"  aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -55,7 +55,7 @@
                     <input type="hidden" name="product_id" value="">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
@@ -145,14 +145,16 @@ $(document).on('click', '.edit-product', function() {
   editProduct(productId);
 });
 
-
+$(document).on('click', '.close-modal', function() {
+    $('#edit-product-modal').modal('hide');
+});
 
 // Show the edit modal when add product button is clicked
 $('#add-product-btn').click(function() {
   $('#edit-product-modal').modal('show');
   $('#edit-product-modal .modal-title').text('Add Product'); // Change modal title
   $('#edit-product-form')[0].reset(); // Clear form fields
-  $('#edit-product-form input[type="submit"]').val('Add Product'); // Change submit button text
+  $('#edit-product-form input[type="submit"]').attr('value', 'Add Product');
 });
 
 // Define event handler for submitting edit product form
