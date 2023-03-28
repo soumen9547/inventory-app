@@ -1,5 +1,7 @@
 inventory shop.
-The shop must have two types of accounts. (Here I make three type use & here we can create multipile admin)
+
+
+- The shop must have two types of accounts. (Here I make three type use & here we can create multipile admin)
 - Admin
 - Moderator
 - Client
