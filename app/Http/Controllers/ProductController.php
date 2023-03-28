@@ -4,9 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +25,24 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         $products = Product::all();
-        return response()->json(['data' => $products]);
+        return view('products.index', compact('products'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $user = Auth::user();
+        if (!$user->user_type =='admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('products.create');
     }
 
     /**
@@ -26,6 +53,11 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+        if (!$user->user_type =='admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validatedData = $request->validate([
             'name' => 'required',
             'description' => 'required',
@@ -33,20 +65,26 @@ class ProductController extends Controller
             'quantity' => 'required|integer|min:0',
         ]);
 
-        $product = Product::create($validatedData);
+        Product::create($validatedData);
 
-        return response()->json(['data' => $product], 201);
+        return redirect()->route('products.index')
+                         ->with('success', 'Product created successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function edit(Product $product)
     {
-        return response()->json(['data' => $product]);
+        $user = Auth::user();
+        if (!$user->user_type =='admin' && !$user->user_type =='moderator') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('products.edit', compact('product'));
     }
 
     /**
@@ -58,6 +96,11 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        $user = Auth::user();
+        if (!$user->user_type =='admin' && !$user->user_type =='moderator') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validatedData = $request->validate([
             'name' => 'required',
             'description' => 'required',
@@ -67,7 +110,8 @@ class ProductController extends Controller
 
         $product->update($validatedData);
 
-        return response()->json(['data' => $product]);
+        return redirect()->route('products.index')
+                         ->with('success', 'Product updated successfully.');
     }
 
     /**
@@ -78,8 +122,16 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product->delete();
-
-        return response()->json(['message' => 'Productsuccessfully deleted.'], 200);
+            $user = Auth::user();
+            if (!$user->user_type =='moderator') {
+                abort(403, 'Unauthorized action.');
+            }
+            
+            $product->delete();
+            
+            return redirect()->route('products.index')
+                             ->with('success', 'Product deleted successfully.');
+        
     }
-}
+}            
+       
