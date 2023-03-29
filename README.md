@@ -47,6 +47,11 @@ php artisan migrate
 ```
  php artisan serve
 ```
+If you get No application encryption key has been specified. issue then run
+  
+  ```
+php artisan key:generate
+```
 ## Authors
 
 Contributors names and contact info
