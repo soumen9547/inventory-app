@@ -20,7 +20,7 @@ Simple overview of use/purpose.
 ### Installing
 
   * Clone 
-     https://github.com/soumen9547/inventory-app.git
+      git clone https://github.com/soumen9547/inventory-app.git
   * Create a database in your  [local php myadmin](http://localhost/phpmyadmin/)
   * change file .env.example to .env
   * Update your composer  open your terminal run
@@ -36,7 +36,7 @@ Simple overview of use/purpose.
 * How to run the program
 * Step-by-step bullets
 ```
-https://github.com/soumen9547/inventory-app.git
+git clone https://github.com/soumen9547/inventory-app.git
 ```
 ```
 composer update
